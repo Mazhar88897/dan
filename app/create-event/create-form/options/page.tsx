@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { ReactNode } from "react";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, Suspense, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
 const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
@@ -66,7 +66,7 @@ function BackLink({ href, children }: { href: string; children: ReactNode }) {
   );
 }
 
-export default function CreateEventOptionsPage() {
+function CreateEventOptionsPageContent() {
   const searchParams = useSearchParams();
   const eventId = searchParams.get("event_id") ?? "";
 
@@ -427,5 +427,22 @@ export default function CreateEventOptionsPage() {
 
      
     </OptionsThemedLayout>
+  );
+}
+
+export default function CreateEventOptionsPage() {
+  return (
+    <Suspense
+      fallback={
+        <OptionsThemedLayout>
+          <div className="mt-8">
+            <BackLink href="/create-event">← Back to your events</BackLink>
+          </div>
+          <p className="mt-6 text-sm text-white/65">Loading…</p>
+        </OptionsThemedLayout>
+      }
+    >
+      <CreateEventOptionsPageContent />
+    </Suspense>
   );
 }
