@@ -51,14 +51,14 @@ function normalizeHtmlText(html: string): string {
 }
 
 const DONUT_COLORS = [
-  "#a78bfa",
-  "#c084fc",
-  "#e879f9",
   "#8b5cf6",
+  "#ef4444",
+  "#f59e0b",
+  "#22c55e",
+  "#3b82f6",
   "#a855f7",
-  "#6366f1",
-  "#d946ef",
-  "#7c3aed",
+  "#eab308",
+  "#10b981",
 ] as const;
 
 function annularSectorPath(
@@ -1044,6 +1044,8 @@ export default function TestEventPage() {
         </div>
 
 
+
+
         <section className="mt-10 sm:mt-14 lg:mt-16">
           <GlassPanel className="overflow-hidden border-white/15 bg-[#0c1234]/35 px-4 py-6 sm:px-8 sm:py-10">
             <h2 className="mb-4 text-center text-base font-semibold text-white sm:mb-6 sm:text-lg md:text-xl">
@@ -1083,6 +1085,32 @@ export default function TestEventPage() {
               label="Visibility"
             />
           </div>
+        </section>
+
+
+          {/* Vote CTA */}
+          <section id="vote" className="mt-10 scroll-mt-6 text-center sm:mt-14 lg:mt-16">
+          <GlassPanel className="mx-auto max-w-4xl px-4 py-8 sm:px-10 sm:py-12">
+            <h2 className="text-lg font-semibold text-white sm:text-xl md:text-2xl">Cast your vote</h2>
+            <p className="mx-auto mt-2 max-w-lg text-xs text-white/50 sm:text-sm">
+              Tap an option to sign in (if needed), complete KYC, and confirm your vote.
+            </p>
+            <div className="mt-6 flex flex-col flex-wrap justify-center gap-2 sm:mt-8 sm:flex-row sm:flex-nowrap sm:gap-3 md:gap-4">
+              {options.map((opt, i) => {
+                const style = OPTION_STYLES[i % OPTION_STYLES.length];
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => handleOptionVoteClick(opt)}
+                    className={`min-h-[2.75rem] w-full rounded-xl bg-gradient-to-r px-3 py-3 text-center text-xs font-bold leading-tight tracking-wide text-white transition sm:min-h-0 sm:w-auto sm:flex-1 sm:whitespace-nowrap sm:px-3 sm:py-4 sm:text-sm md:text-base ${style.colorClass} ${style.glowClass} hover:opacity-95`}
+                  >
+                    {opt.name}
+                  </button>
+                );
+              })}
+            </div>
+          </GlassPanel>
         </section>
 
         {/* Detailed results */}
@@ -1253,30 +1281,7 @@ export default function TestEventPage() {
           </div>
         </section>
 
-        {/* Vote CTA */}
-        <section id="vote" className="mt-10 scroll-mt-6 text-center sm:mt-14 lg:mt-16">
-          <GlassPanel className="mx-auto max-w-4xl px-4 py-8 sm:px-10 sm:py-12">
-            <h2 className="text-lg font-semibold text-white sm:text-xl md:text-2xl">Cast your vote</h2>
-            <p className="mx-auto mt-2 max-w-lg text-xs text-white/50 sm:text-sm">
-              Tap an option to sign in (if needed), complete KYC, and confirm your vote.
-            </p>
-            <div className="mt-6 flex flex-col flex-wrap justify-center gap-2 sm:mt-8 sm:flex-row sm:flex-nowrap sm:gap-3 md:gap-4">
-              {options.map((opt, i) => {
-                const style = OPTION_STYLES[i % OPTION_STYLES.length];
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => handleOptionVoteClick(opt)}
-                    className={`min-h-[2.75rem] w-full rounded-xl bg-gradient-to-r px-3 py-3 text-center text-xs font-bold leading-tight tracking-wide text-white transition sm:min-h-0 sm:w-auto sm:flex-1 sm:whitespace-nowrap sm:px-3 sm:py-4 sm:text-sm md:text-base ${style.colorClass} ${style.glowClass} hover:opacity-95`}
-                  >
-                    {opt.name}
-                  </button>
-                );
-              })}
-            </div>
-          </GlassPanel>
-        </section>
+      
 
   
 
