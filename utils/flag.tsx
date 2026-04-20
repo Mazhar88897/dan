@@ -1,6 +1,7 @@
+import type { ReactElement } from "react";
 import ReactCountryFlag from "react-country-flag";
 
-export function countryCodeToFlag(countryCode: string): JSX.Element {
+export function countryCodeToFlag(countryCode: string): ReactElement {
   // Handle EU (European Union) which doesn't have a standard ISO code
   if (countryCode === 'EU') {
     return (
