@@ -1011,7 +1011,7 @@ export default function TestEventPage() {
           </div>
 
           <div className="relative order-1 flex min-h-[200px] justify-center sm:min-h-[280px] lg:order-2 lg:min-h-[420px]">
-            <div className="relative aspect-square w-full max-w-[min(100%,min(78vw,280px))] overflow-hidden rounded-full border border-white/10 sm:max-w-[min(100%,360px)]">
+            <div className="relative aspect-square w-full max-w-[min(100%,min(78vw,280px))] overflow-hidden rounded-full sm:max-w-[min(100%,360px)]">
               <Image
                 src="/src1.png"
                 alt="Earth"
