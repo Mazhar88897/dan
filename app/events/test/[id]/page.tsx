@@ -118,9 +118,6 @@ function CountryVotesDonut({
   const labelR = 92;
 
   let angle = -90;
-  const uid = useId().replace(/:/g, "");
-  const filterId = `donutGlow-${uid}`;
-
   const slicePaths = segments.map((seg, i) => {
     const sweep = seg.pct > 0 ? (seg.pct / 100) * 360 : 0;
     const start = angle;
@@ -153,25 +150,16 @@ function CountryVotesDonut({
           height={400}
           viewBox="0 0 200 200"
           className="h-auto w-full overflow-visible"
+          shapeRendering="geometricPrecision"
           aria-hidden
         >
-          <defs>
-            <filter id={filterId} x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="2.2" result="b" />
-              <feMerge>
-                <feMergeNode in="b" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
           <circle
             cx={cx}
             cy={cy}
             r={(rOuter + rInner) / 2}
             fill="none"
-            stroke="rgba(139,92,246,0.25)"
+            stroke="rgba(139,92,246,0.35)"
             strokeWidth={rOuter - rInner}
-            className="opacity-90"
           />
           {slicePaths.map(({ d, seg, color, i, sweep }) =>
             d ? (
@@ -179,9 +167,11 @@ function CountryVotesDonut({
                 key={`${seg.name}-${i}`}
                 d={d}
                 fill={color}
-                fillOpacity={0.92}
-                filter={`url(#${filterId})`}
-                className="transition-opacity hover:opacity-100"
+                fillOpacity={1}
+                stroke="rgba(3,3,14,1)"
+                strokeWidth={1.2}
+                strokeLinecap="butt"
+                strokeLinejoin="miter"
               />
             ) : null,
           )}
@@ -204,7 +194,6 @@ function CountryVotesDonut({
                           width: 26,
                           height: 18,
                           borderRadius: 3,
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.6)",
                         }}
                         title={seg.name}
                       />
@@ -219,7 +208,6 @@ function CountryVotesDonut({
                   fontWeight="600"
                   textAnchor="middle"
                   dominantBaseline={flagIso ? "hanging" : "middle"}
-                  className="drop-shadow-[0_1px_4px_rgba(0,0,0,0.85)]"
                 >
                   <tspan x={lx} dy={flagIso ? "0" : "-0.4em"}>
                     {shortenLabel(seg.name, 15)}
@@ -272,7 +260,7 @@ function CountryVotesDonut({
                   </span>
                 )}
                 <span
-                  className="h-2 w-2 shrink-0 rounded-full shadow-[0_0_8px_currentColor]"
+                  className="h-2 w-2 shrink-0 rounded-full"
                   style={{
                     backgroundColor: DONUT_COLORS[i % DONUT_COLORS.length],
                     color: DONUT_COLORS[i % DONUT_COLORS.length],
@@ -1022,23 +1010,16 @@ export default function TestEventPage() {
             </div>
           </div>
 
-          <div className="hidden sm:block relative order-1 flex min-h-[200px] justify-center sm:min-h-[280px] lg:order-2 lg:min-h-[420px]">
-            <div
-              className="pointer-events-none absolute right-0 top-1/2 h-[min(85vw,420px)] w-[min(85vw,420px)] -translate-y-1/2 translate-x-[8%] rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.35)_0%,rgba(251,146,60,0.12)_35%,transparent_65%)] blur-2xl sm:h-[min(90vw,520px)] sm:w-[min(90vw,520px)] sm:translate-x-[15%]"
-              aria-hidden
-            />
-            <div className="relative aspect-square w-full max-w-[min(100%,min(92vw,380px))] pt-6 sm:max-w-[min(100%,520px)] sm:pt-16">
-              {countryVoteDonutSegments.length === 0 ? (
-                <div className="flex h-full w-full items-center justify-center rounded-full border border-white/10 bg-white/[0.03]">
-                  <GlobeIcon />
-                </div>
-              ) : (
-                <CountryVotesDonut
-                  centerTotal={event.total_votes_cast}
-                  segments={countryVoteDonutSegments}
-                  showLegend={false}
-                />
-              )}
+          <div className="relative order-1 flex min-h-[200px] justify-center sm:min-h-[280px] lg:order-2 lg:min-h-[420px]">
+            <div className="relative aspect-square w-full max-w-[min(100%,min(78vw,280px))] overflow-hidden rounded-full border border-white/10 sm:max-w-[min(100%,360px)]">
+              <Image
+                src="/src1.png"
+                alt="Earth"
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 640px) 62vw, (max-width: 1024px) 320px, 360px"
+              />
             </div>
           </div>
         </div>
