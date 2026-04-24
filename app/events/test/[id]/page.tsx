@@ -90,15 +90,11 @@ function annularSectorPath(
   ].join(" ");
 }
 
-function shortenLabel(s: string, max = 14) {
-  if (s.length <= max) return s;
-  return `${s.slice(0, max - 1)}…`;
-}
-
 type CountryVoteDonutSegment = {
   name: string;
   votes: number;
   pct: number;
+  /** ISO code for legend flag only; not drawn on the donut SVG. */
   flagIso?: string | null;
 };
 
@@ -115,7 +111,6 @@ function CountryVotesDonut({
   const cy = 100;
   const rOuter = 78;
   const rInner = 48;
-  const labelR = 92;
 
   let angle = -90;
   const slicePaths = segments.map((seg, i) => {
@@ -127,13 +122,8 @@ function CountryVotesDonut({
       sweep > 0.05
         ? annularSectorPath(cx, cy, rInner, rOuter, start, end)
         : "";
-    const mid = (start + end) / 2;
-    const mr = (mid * Math.PI) / 180;
-    const lx = cx + labelR * Math.cos(mr);
-    const ly = cy + labelR * Math.sin(mr);
     const color = DONUT_COLORS[i % DONUT_COLORS.length];
-    const flagIso = seg.flagIso ?? null;
-    return { d, mid, lx, ly, seg, color, i, sweep, flagIso };
+    return { d, seg, color, i };
   });
 
   return (
@@ -161,7 +151,7 @@ function CountryVotesDonut({
             stroke="rgba(139,92,246,0.35)"
             strokeWidth={rOuter - rInner}
           />
-          {slicePaths.map(({ d, seg, color, i, sweep }) =>
+          {slicePaths.map(({ d, seg, color, i }) =>
             d ? (
               <path
                 key={`${seg.name}-${i}`}
@@ -173,50 +163,6 @@ function CountryVotesDonut({
                 strokeLinecap="butt"
                 strokeLinejoin="miter"
               />
-            ) : null,
-          )}
-          {slicePaths.map(({ lx, ly, seg, sweep, flagIso }, ti) =>
-            sweep > 4 ? (
-              <g key={`t-${seg.name}-${ti}`} className="pointer-events-none select-none">
-                {flagIso ? (
-                  <foreignObject
-                    x={lx - 14}
-                    y={ly - (sweep > 10 ? 26 : 22)}
-                    width={28}
-                    height={20}
-                    className="overflow-visible"
-                  >
-                    <div className="flex h-full w-full items-start justify-center">
-                      <ReactCountryFlag
-                        countryCode={flagIso}
-                        svg
-                        style={{
-                          width: 26,
-                          height: 18,
-                          borderRadius: 3,
-                        }}
-                        title={seg.name}
-                      />
-                    </div>
-                  </foreignObject>
-                ) : null}
-                <text
-                  x={lx}
-                  y={flagIso ? ly + 6 : ly}
-                  fill="white"
-                  fontSize="7"
-                  fontWeight="600"
-                  textAnchor="middle"
-                  dominantBaseline={flagIso ? "hanging" : "middle"}
-                >
-                  <tspan x={lx} dy={flagIso ? "0" : "-0.4em"}>
-                    {shortenLabel(seg.name, 15)}
-                  </tspan>
-                  <tspan x={lx} dy="1.3em" fill="rgba(255,255,255,0.85)" fontSize="6">
-                    {seg.pct.toFixed(0)}%
-                  </tspan>
-                </text>
-              </g>
             ) : null,
           )}
         </svg>
@@ -238,6 +184,14 @@ function CountryVotesDonut({
               className="flex items-center justify-between gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 sm:gap-3 sm:px-4 sm:py-2.5"
             >
               <span className="flex min-w-0 items-center gap-2.5">
+                <span
+                  className="h-2 w-2 shrink-0 rounded-full"
+                  style={{
+                    backgroundColor: DONUT_COLORS[i % DONUT_COLORS.length],
+                    color: DONUT_COLORS[i % DONUT_COLORS.length],
+                  }}
+                  aria-hidden
+                />
                 {seg.flagIso ? (
                   <ReactCountryFlag
                     countryCode={seg.flagIso}
@@ -259,14 +213,6 @@ function CountryVotesDonut({
                     🌐
                   </span>
                 )}
-                <span
-                  className="h-2 w-2 shrink-0 rounded-full"
-                  style={{
-                    backgroundColor: DONUT_COLORS[i % DONUT_COLORS.length],
-                    color: DONUT_COLORS[i % DONUT_COLORS.length],
-                  }}
-                  aria-hidden
-                />
                 <span className="truncate font-medium text-white/90">{seg.name}</span>
               </span>
               <span className="shrink-0 tabular-nums text-white/60">
@@ -1010,7 +956,7 @@ export default function TestEventPage() {
             </div>
           </div>
 
-          <div className="relative order-1 flex min-h-[200px] justify-center sm:min-h-[280px] lg:order-2 lg:min-h-[420px]">
+          <div className=" hidden sm:flex relative order-1 flex min-h-[200px] justify-center sm:min-h-[280px] lg:order-2 lg:min-h-[420px]">
             <div className="relative aspect-square w-full max-w-[min(100%,min(78vw,280px))] overflow-hidden rounded-full sm:max-w-[min(100%,360px)]">
               <Image
                 src="/src1.png"
