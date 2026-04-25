@@ -52,12 +52,13 @@ function CompleteSignUpContent() {
   const openDobPicker = () => {
     const el = dobInputRef.current;
     if (!el) return;
+    const pickerEl = el as HTMLInputElement & { showPicker?: () => void };
     // showPicker is supported by Chromium-based browsers.
-    if ("showPicker" in el) {
-      (el as HTMLInputElement & { showPicker: () => void }).showPicker();
+    if (typeof pickerEl.showPicker === "function") {
+      pickerEl.showPicker();
       return;
     }
-    el.focus();
+    pickerEl.focus();
   };
 
   useEffect(() => {
