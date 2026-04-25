@@ -2,11 +2,16 @@
 
 import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 function SignInPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/events";
+  const signUpHref =
+    redirectTo && redirectTo !== "/events"
+      ? `/auth/sign-up?redirect=${encodeURIComponent(redirectTo)}`
+      : "/auth/sign-up";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -115,6 +120,14 @@ function SignInPageContent() {
                 className="w-full rounded-lg bg-slate-900 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                 placeholder="••••••••"
               />
+              <div className="mt-1 text-right">
+                <Link
+                  href="/auth/forgot-password"
+                  className="text-[11px] text-purple-300 underline decoration-purple-500/50 hover:text-purple-200"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {error && <p className="text-xs text-red-400">{error}</p>}
@@ -128,10 +141,26 @@ function SignInPageContent() {
             </button>
           </form>
 
-          <p className="mt-4 text-[11px] text-gray-500 text-center">
-            New here? Account creation is handled in the main app. Use the same email and
-            password here.
+          <p className="mt-4 text-center text-[11px] text-gray-500">
+            New here?{" "}
+            <Link
+              href={signUpHref}
+              className="font-medium text-purple-300 underline decoration-purple-500/50 hover:text-purple-200"
+            >
+              Create an account
+            </Link>{" "}
+            — use the same email and password to sign in afterward.
           </p>
+          {searchParams.get("registered") && (
+            <p className="mt-2 text-center text-xs text-emerald-400/90">
+              Account created. You can sign in now.
+            </p>
+          )}
+          {searchParams.get("passwordReset") && (
+            <p className="mt-2 text-center text-xs text-emerald-400/90">
+              Password reset complete. Sign in with your new password.
+            </p>
+          )}
         </div>
       </div>
     </div>
