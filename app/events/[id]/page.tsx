@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Toaster, toast } from "react-hot-toast";
+import Link from "next/link";
 
 type Event = {
   id: string;
@@ -511,6 +512,14 @@ export default function EventDetailPage() {
                     className="w-full rounded-lg bg-slate-800 border border-white/10 px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
                     placeholder="••••••••"
                   />
+                  <div className="mt-1 text-right">
+                    <Link
+                      href="/auth/forgot-password"
+                      className="text-[11px] text-purple-300 underline decoration-purple-500/50 hover:text-purple-200"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                 </div>
                 {loginError && (
                   <p className="text-xs text-red-400">{loginError}</p>
@@ -525,7 +534,14 @@ export default function EventDetailPage() {
               </form>
 
               <p className="mt-3 text-[11px] text-gray-500 text-center">
-                Don&apos;t have an account yet? Voting requires a quick signup in the main app.
+                Don&apos;t have an account?{" "}
+                <Link
+                  href="/auth/sign-up"
+                  className="font-medium text-purple-300 underline decoration-purple-500/50 hover:text-purple-200"
+                >
+                  Sign up
+                </Link>
+                {" "}to continue voting.
               </p>
             </div>
           </div>

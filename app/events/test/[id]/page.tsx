@@ -1461,6 +1461,14 @@ export default function TestEventPage() {
                   className="w-full rounded-lg border border-white/10 bg-slate-800 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-400"
                   placeholder="••••••••"
                 />
+                <div className="mt-1 text-right">
+                  <Link
+                    href="/auth/forgot-password"
+                    className="text-[11px] text-purple-300 underline decoration-purple-500/50 hover:text-purple-200"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
               </div>
               {loginError && <p className="text-xs text-red-400">{loginError}</p>}
               <button
@@ -1473,7 +1481,14 @@ export default function TestEventPage() {
             </form>
 
             <p className="mt-3 text-center text-[11px] text-gray-500">
-              Don&apos;t have an account yet? Voting requires a quick signup in the main app.
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/auth/sign-up"
+                className="font-medium text-purple-300 underline decoration-purple-500/50 hover:text-purple-200"
+              >
+                Sign up
+              </Link>
+              {" "}to continue voting.
             </p>
           </div>
         </div>
