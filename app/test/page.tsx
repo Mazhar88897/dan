@@ -264,7 +264,7 @@ export default function TestPage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 py-12 sm:px-6 sm:py-16 md:py-20">
         {/* Starry background */}
-        <div className="absolute inset-0 opacity-30">
+        <div className="hidden sm:block absolute inset-0 opacity-30">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
             backgroundSize: '50px 50px'
