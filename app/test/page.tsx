@@ -260,7 +260,9 @@ export default function TestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#050515]  via-[#1c2248]  to-[#050515]  text-white">
+    <>
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-gradient-to-br from-[#050515] via-[#1c2248] to-[#050515]" />
+      <div className="relative min-h-screen text-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 py-12 sm:px-6 sm:py-16 md:py-20">
         {/* Starry background */}
@@ -1178,6 +1180,7 @@ export default function TestPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 }
