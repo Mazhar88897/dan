@@ -51,14 +51,18 @@ function normalizeHtmlText(html: string): string {
 }
 
 const DONUT_COLORS = [
-  "#8b5cf6",
+  "#3b82f6",
   "#ef4444",
   "#f59e0b",
   "#22c55e",
-  "#3b82f6",
-  "#a855f7",
+  "#06b6d4",
+  "#ec4899",
   "#eab308",
-  "#10b981",
+  "#8b5cf6",
+  "#14b8a6",
+  "#f97316",
+  "#84cc16",
+  "#6366f1",
 ] as const;
 
 function annularSectorPath(
@@ -90,6 +94,11 @@ function annularSectorPath(
   ].join(" ");
 }
 
+function shortenLabel(s: string, max = 14) {
+  if (s.length <= max) return s;
+  return `${s.slice(0, max - 1)}...`;
+}
+
 type CountryVoteDonutSegment = {
   name: string;
   votes: number;
@@ -111,6 +120,8 @@ function CountryVotesDonut({
   const cy = 100;
   const rOuter = 78;
   const rInner = 48;
+  const labelR = 92;
+  const [hoveredSliceIndex, setHoveredSliceIndex] = useState<number | null>(null);
 
   let angle = -90;
   const slicePaths = segments.map((seg, i) => {
@@ -122,9 +133,14 @@ function CountryVotesDonut({
       sweep > 0.05
         ? annularSectorPath(cx, cy, rInner, rOuter, start, end)
         : "";
+    const mid = (start + end) / 2;
+    const mr = (mid * Math.PI) / 180;
+    const lx = cx + labelR * Math.cos(mr);
+    const ly = cy + labelR * Math.sin(mr);
     const color = DONUT_COLORS[i % DONUT_COLORS.length];
-    return { d, seg, color, i };
+    return { d, seg, color, i, sweep, lx, ly };
   });
+  const hoveredSlice = hoveredSliceIndex == null ? null : slicePaths[hoveredSliceIndex] ?? null;
 
   return (
     <div
@@ -142,6 +158,7 @@ function CountryVotesDonut({
           className="h-auto w-full overflow-visible"
           shapeRendering="geometricPrecision"
           aria-hidden
+          onMouseLeave={() => setHoveredSliceIndex(null)}
         >
           <circle
             cx={cx}
@@ -162,10 +179,43 @@ function CountryVotesDonut({
                 strokeWidth={1.2}
                 strokeLinecap="butt"
                 strokeLinejoin="miter"
+                className="cursor-pointer"
+                onMouseEnter={() => setHoveredSliceIndex(i)}
+                onFocus={() => setHoveredSliceIndex(i)}
+                onBlur={() => setHoveredSliceIndex(null)}
               />
             ) : null,
           )}
         </svg>
+        {hoveredSlice && hoveredSlice.sweep > 0.05 ? (
+          <div
+            className="pointer-events-none absolute z-[2] -translate-x-1/2 -translate-y-[115%]"
+            style={{
+              left: `${(hoveredSlice.lx / 200) * 100}%`,
+              top: `${(hoveredSlice.ly / 200) * 100}%`,
+            }}
+          >
+            <div className="flex items-center gap-2 px-1 py-0.5 text-xs font-medium text-white">
+              {hoveredSlice.seg.flagIso ? (
+                <ReactCountryFlag
+                  countryCode={hoveredSlice.seg.flagIso}
+                  svg
+                  style={{
+                    width: 18,
+                    height: 13,
+                    borderRadius: 2,
+                  }}
+                  title={hoveredSlice.seg.name}
+                />
+              ) : (
+                <span className="text-white/70" aria-hidden>
+                  🌐
+                </span>
+              )}
+              <span>{shortenLabel(hoveredSlice.seg.name, 24)}</span>
+            </div>
+          </div>
+        ) : null}
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
           <p className="text-2xl font-semibold tabular-nums tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
             {formatInt(centerTotal)}
