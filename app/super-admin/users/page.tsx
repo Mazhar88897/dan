@@ -223,6 +223,12 @@ export default function SuperAdminUsersPage() {
             >
               Events
             </Link>
+            <Link
+              href="/super-admin/countries"
+              className="rounded-xl border border-white/20 px-4 py-2 text-sm text-white/80 hover:text-white"
+            >
+              Countries
+            </Link>
             <button
               type="button"
               onClick={() => void loadUsers()}

@@ -299,6 +299,12 @@ export default function SuperAdminCrudPage() {
             >
               Users
             </Link>
+            <Link
+              href="/super-admin/countries"
+              className="rounded-xl border border-white/20 px-4 py-2 text-sm text-white/70 hover:text-white/90"
+            >
+              Countries
+            </Link>
             <button
               type="button"
               onClick={() => setLogoutOpen(true)}
